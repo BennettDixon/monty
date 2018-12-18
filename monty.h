@@ -1,5 +1,12 @@
 #ifndef __MONTY_H__
 #define __MONTY_H__
+
+#include <stdio.h>
+#include <stdlib.h>
+
+/* GLOBAL OPCODE TOKENS */
+extern char **op_toks;
+
 /**
  * struct stack_s - doubly linked list representation of a stack (or queue)
  * @n: integer
@@ -31,7 +38,7 @@ typedef struct instruction_s
 } instruction_t;
 
 /* PRIMARY INTERPRETER FUNCTIONS */
-int run_monty(int script_fd);
+int run_monty(FILE *script_fd);
 
 /* OPCODE FUNCTIONS */
 void monty_stack(stack_t **stack, unsigned int line_number);
@@ -41,6 +48,7 @@ void monty_pall(stack_t **stack, unsigned int line_number);
 
 /* CUSTOM STANDARD LIBRARY FUNCTIONS */
 int _strlen(char *str);
+char **strtow(char *str, char *delims);
 
 /* ERROR MESSAGES & ERROR CODES */
 int usage_error(void);

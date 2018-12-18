@@ -1,6 +1,7 @@
 #include "monty.h"
 #include <unistd.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 /**
  * usage_error - prints usage error and returns error code
@@ -45,7 +46,7 @@ int f_open_error(char *filename)
  */
 int unknown_op_error(char *opcode, unsigned int line_number)
 {
-	fprintf(stderr, "L%<%u>: unknown instruction <%s>\n",
+	fprintf(stderr, "L<%u>: unknown instruction <%s>\n",
 		line_number, opcode);
 	return (EXIT_FAILURE);
 }
