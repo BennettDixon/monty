@@ -33,6 +33,12 @@ typedef struct instruction_s
 /* PRIMARY INTERPRETER FUNCTIONS */
 int run_monty(int script_fd);
 
+/* OPCODE FUNCTIONS */
+void monty_stack(stack_t **stack, unsigned int line_number);
+void monty_queue(stack_t **stack, unsigned int line_number);
+void monty_push(stack_t **stack, unsigned int line_number);
+void monty_pall(stack_t **stack, unsigned int line_number);
+
 /* CUSTOM STANDARD LIBRARY FUNCTIONS */
 int _strlen(char *str);
 
