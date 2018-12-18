@@ -14,34 +14,6 @@ int usage_error(void)
 }
 
 /**
- * f_open_error - prints file open error w/ file name
- * @filename: name of file failed to open
- *
- * Return: (EXIT_FAILURE) always
- */
-int f_open_error(char *filename)
-{
-	size_t fn_len = 0;
-	char *err_str = NULL, *err_const = "Error: Can't open file ";
-	int err_const_len = 23, err_i = 0, i = 0;
-
-	fn_len = _strlen(filename);
-	err_str = malloc(sizeof(char) * (err_const_len + fn_len + 2));
-	if (!err_str)
-		return (malloc_error());
-	while (err_const[i])
-		err_str[err_i++] = err_const[i++];
-	i = 0;
-	while (filename[i])
-		err_str[err_i++] = filename[i++];
-	err_str[err_i++] = '\n';
-	err_str[err_i++] = '\0';
-	write(STDERR_FILENO, err_str, fn_len + err_const_len + 1);
-	free(err_str);
-	return (EXIT_FAILURE);
-}
-
-/**
  * malloc_error - prints malloc error information and returns error code
  *
  * Return: (EXIT_FAILURE) always
@@ -49,5 +21,43 @@ int f_open_error(char *filename)
 int malloc_error(void)
 {
 	write(STDERR_FILENO, "Error: malloc failed\n", 21);
+	return (EXIT_FAILURE);
+}
+
+/**
+ * f_open_error - prints file open error w/ file name
+ * @filename: name of file failed to open
+ *
+ * Return: (EXIT_FAILURE) always
+ */
+int f_open_error(char *filename)
+{
+	fprintf(stderr, "Error: Can't open file <%s>\n", filename);
+	return (EXIT_FAILURE);
+}
+
+/**
+ * unknown_op_error - prints the unknown opcode error to STDERR
+ * @opcode: opcode where error occured
+ * @line_number: line number in script where error occured
+ *
+ * Return: (EXIT_FAILURE) always
+ */
+int unknown_op_error(char *opcode, unsigned int line_number)
+{
+	fprintf(stderr, "L%<%u>: unknown instruction <%s>\n",
+		line_number, opcode);
+	return (EXIT_FAILURE);
+}
+
+/**
+ * no_int_error - prints the invalid argument provided error
+ * @line_number: line in script error occured on
+ *
+ * Return: (EXIT_FAILURE) always
+ */
+int no_int_error(unsigned int line_number)
+{
+	fprintf(stderr, "L<%u>: usage: push integer\n", line_number);
 	return (EXIT_FAILURE);
 }

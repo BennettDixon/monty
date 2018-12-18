@@ -40,5 +40,7 @@ int _strlen(char *str);
 int usage_error(void);
 int f_open_error(char *filename);
 int malloc_error(void);
+int unknown_op_error(char *opcode, unsigned int line_number);
+int no_int_error(unsigned int line_number);
 
 #endif /* __MONTY_H__ */
