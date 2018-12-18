@@ -30,4 +30,15 @@ typedef struct instruction_s
         void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
 
+/* PRIMARY INTERPRETER FUNCTIONS */
+int run_monty(int script_fd);
+
+/* CUSTOM STANDARD LIBRARY FUNCTIONS */
+int _strlen(char *str);
+
+/* ERROR MESSAGES & ERROR CODES */
+int usage_error(void);
+int f_open_error(char *filename);
+int malloc_error(void);
+
 #endif /* __MONTY_H__ */
