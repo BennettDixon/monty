@@ -1,5 +1,6 @@
-# :ocean: :shell: SeaShell
+# :ocean: Monty Interpreter
 
+TODO: UPDATE THIS DESCRIPTION
 cshell is an implementation of the original UNIX shell in C. It uses the POSIX API to implement a lot of the same functionality of Ken Thompson's first shell. The API calls predominantly used are <code>read</code>, <code>write</code>, <code>fork</code>, <code>exec</code>, and <code>wait</code> to name a few.
 
 
@@ -26,12 +27,12 @@ $ sudo apt-get install git
 Clone the repository into a new directory
 
 ```
-$ git clone https://github.com/BennettDixon/simple_shell.git
+$ git clone https://github.com/BennettDixon/monty.git
 ```
 Compile with the following:
 
 ```
-gcc -Wall -Werror -Wextra -pedantic *.c -o seashell
+gcc -Wall -Werror -Wextra -pedantic *.c -o monty
 ```
 
 
@@ -102,7 +103,7 @@ $ cd Betty; ./install.sh
 
 ## :blue_book: Authors
 
-* **Connor Brereton** - [@ConnorBrereton](https://github.com/ConnorBrereton/printf)
+* **Brennan Baraban** - [@bdbaraban](https://github.com/bdbaraban)
 
 * **Bennett Dixon** - [@BennettDixon](https://github.com/BennettDixon)
 
