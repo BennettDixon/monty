@@ -116,7 +116,11 @@ int run_monty(FILE *script_fd)
 			free_stack(&stack);
 			return (malloc_error());
 		}
-
+		if (op_toks[0][0] == '#') /* comment line */
+		{
+			free_tokens();
+			continue;
+		}
 		op_func = get_op_func(op_toks[0]);
 		if (op_func == NULL)
 		{
