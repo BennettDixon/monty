@@ -1,6 +1,10 @@
+/*
+ * File: monty_funcs_1.c
+ * Auth: Bennett Dixon
+ *       Brennan D Baraban
+ */
+
 #include "monty.h"
-#include <stdlib.h>
-#include <stdio.h>
 
 void monty_stack(stack_t **stack, unsigned int line_number);
 void monty_queue(stack_t **stack, unsigned int line_number);
@@ -9,8 +13,9 @@ void monty_push(stack_t **stack, unsigned int line_number);
 
 /**
  * monty_stack - Converts a stack to a queue.
- * @stack: A pointer to the top or bottom of a stack.
- * @line_number: The line number of the opcodes file currently at.
+ * @stack: A pointer to the top (stack) or bottom (queue)
+ *         of a stack_t linked list.
+ * @line_number: The current working line number of a monty opcodes file.
  */
 void monty_stack(stack_t **stack, unsigned int line_number)
 {
@@ -29,8 +34,9 @@ void monty_stack(stack_t **stack, unsigned int line_number)
 
 /**
  * monty_queue - Converts a queue to a stack.
- * @stack: A pointer to the top or bottom of a stack.
- * @line_number: The line number of the opcodes file currently at.
+ * @stack: A pointer to the top (stack) or bottom (queue)
+ *         of a stack_t linked list.
+ * @line_number: The current working line number of a monty opcodes file.
  */
 void monty_queue(stack_t **stack, unsigned int line_number)
 {
@@ -48,9 +54,10 @@ void monty_queue(stack_t **stack, unsigned int line_number)
 }
 
 /**
- * monty_pall - Prints a stack.
- * @stack: A pointer to the top or bottom of a stack.
- * @line_number: The line number of the opcodes file currently at.
+ * monty_pall - Prints a stack_t linked list.
+ * @stack: A pointer to the top (stack) or bottom (queue)
+ *         of a stack_t linked list.
+ * @line_number: The current working line number of a monty opcodes file.
  */
 void monty_pall(stack_t **stack, unsigned int line_number)
 {
@@ -82,9 +89,10 @@ void monty_pall(stack_t **stack, unsigned int line_number)
 }
 
 /**
- * monty_push - Pushes a value to the stack.
- * @stack: A pointer to the top or bottom of a stack.
- * @line_number: The line number of the opcodes file currently at.
+ * monty_push - Pushes a value to a stack_t linked list.
+ * @stack: A pointer to the top (stack) or bottom (queue)
+ *         of a stack_t linked list.
+ * @line_number: The current working line number of a monty opcodes file.
  */
 void monty_push(stack_t **stack, unsigned int line_number)
 {
@@ -94,7 +102,7 @@ void monty_push(stack_t **stack, unsigned int line_number)
 	new = malloc(sizeof(stack_t));
 	if (new == NULL)
 		malloc_error();
-	
+
 	if (stack && *stack)
 	{
 		tmp = *stack;
@@ -119,6 +127,6 @@ void monty_push(stack_t **stack, unsigned int line_number)
 	new->next = tmp;
 	if (tmp != NULL)
 		tmp->prev = new;
-	if (!stack || !(*stack) || (*stack)->next != NULL)
+	if (!stack || !(*stack) || (*stack)->next)
 		*stack = new;
 }

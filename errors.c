@@ -1,7 +1,16 @@
+/*
+ * File: errors.c
+ * Auth: Bennett Dixon
+ */
+
 #include "monty.h"
 #include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
+
+int usage_error(void);
+int malloc_error(void);
+int f_open_error(char *filename);
+int unknown_op_error(char *opcode, unsigned int line_number);
+int no_int_error(unsigned int line_number);
 
 /**
  * usage_error - prints usage error and returns error code
