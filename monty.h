@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 /* GLOBAL OPCODE TOKENS */
 extern char **op_toks;
@@ -38,6 +39,8 @@ typedef struct instruction_s
 } instruction_t;
 
 /* PRIMARY INTERPRETER FUNCTIONS */
+void free_tokens(void);
+void free_stack(stack_t **stack);
 int run_monty(FILE *script_fd);
 
 /* OPCODE FUNCTIONS */
@@ -45,6 +48,11 @@ void monty_stack(stack_t **stack, unsigned int line_number);
 void monty_queue(stack_t **stack, unsigned int line_number);
 void monty_push(stack_t **stack, unsigned int line_number);
 void monty_pall(stack_t **stack, unsigned int line_number);
+void monty_add(stack_t **stack, unsigned int line_number);
+void monty_sub(stack_t **stack, unsigned int line_number);
+void monty_div(stack_t **stack, unsigned int line_number);
+void monty_mul(stack_t **stack, unsigned int line_number);
+void monty_mod(stack_t **stack, unsigned int line_number);
 
 /* CUSTOM STANDARD LIBRARY FUNCTIONS */
 char **strtow(char *str, char *delims);
@@ -55,5 +63,7 @@ int f_open_error(char *filename);
 int malloc_error(void);
 int unknown_op_error(char *opcode, unsigned int line_number);
 int no_int_error(unsigned int line_number);
+int short_stack_error(unsigned int line_number, char *op);
+int div_error(unsigned int line_number);
 
 #endif /* __MONTY_H__ */

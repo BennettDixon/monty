@@ -74,6 +74,11 @@ void (*get_op_func(char *opcode))(stack_t**, unsigned int)
 		{"queue", monty_queue},
 		{"push", monty_push},
 		{"pall", monty_pall},
+		{"add", monty_add},
+		{"sub", monty_sub},
+		{"div", monty_div},
+		{"mul", monty_mul},
+		{"mod", monty_mod},
 		{NULL, NULL}
 	};
 	int i;
@@ -107,7 +112,6 @@ int run_monty(FILE *script_fd)
 		op_toks = strtow(line, " \n\t\a\b");
 		if (op_toks == NULL)
 		{
-			free(line);
 			free_stack(&stack);
 			return (malloc_error());
 		}
@@ -115,7 +119,6 @@ int run_monty(FILE *script_fd)
 		op_func = get_op_func(op_toks[0]);
 		if (op_func == NULL)
 		{
-			free(line);
 			free_tokens();
 			free_stack(&stack);
 			return (unknown_op_error(op_toks[0], line_number));
