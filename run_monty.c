@@ -80,6 +80,7 @@ void (*get_op_func(char *opcode))(stack_t**, unsigned int)
 		{"div", monty_div},
 		{"mul", monty_mul},
 		{"mod", monty_mod},
+		{"nop", monty_nop},
 		{NULL, NULL}
 	};
 	int i;
