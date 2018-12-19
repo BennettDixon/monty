@@ -18,29 +18,13 @@ int is_stack(stack_t **stack);
  */
 void free_stack(stack_t **stack)
 {
-	stack_t *tmp = NULL, *iter = NULL;
+	stack_t *tmp = *stack;
 
-	if (stack && *stack)
+	while (*stack)
 	{
-		tmp = *stack;
-		if ((*stack)->next == NULL) /* queue */
-		{
-			while (tmp)
-			{
-				iter = tmp->prev;
-				free(tmp);
-				tmp = iter;
-			}
-		}
-		else /* normal stack */
-		{
-			while (tmp)
-			{
-				iter = tmp->next;
-				free(tmp);
-				tmp = iter;
-			}
-		}
+		tmp = (*stack)->next;
+		free(*stack);
+		*stack = tmp;
 	}
 }
 
@@ -54,24 +38,15 @@ void free_stack(stack_t **stack)
  */
 int init_stack(stack_t **stack)
 {
-	stack_t *s, *q;
+	stack_t *s;
 
 	s = malloc(sizeof(stack_t));
 	if (s == NULL)
 		return (malloc_error());
-	q = malloc(sizeof(stack_t));
-	if (q == NULL)
-	{
-		free(s);
-		return (malloc_error());
-	}
 
 	s->n = STACK;
 	s->prev = NULL;
-	s->next = q;
-	q->n = QUEUE;
-	q->next = NULL;
-	q->prev = s;
+	s->next = NULL;
 
 	*stack = s;
 
@@ -79,16 +54,19 @@ int init_stack(stack_t **stack)
 }
 
 /**
- * is_stack - Checks if a stack_t linked list is in stack or queue mode.
+ * check_mode - Checks if a stack_t linked list is in stack or queue mode.
  * @stack: A pointer to the top (stack) or bottom (queue)
  *         of a stack_t linked list.
  *
- * Return: If the stack_t is in stack mode - 1.
- *         Otherwise - 0.
+ * Return: If the stack_t is in stack mode - STACK (0).
+ *         If the stack_t is in queue mode - QUEUE (1).
+ *         Otherwise - 2.
  */
-int is_stack(stack_t **stack)
+int check_mode(stack_t *stack)
 {
-	if ((*stack)->n == STACK && (*stack)->prev == NULL)
-		return (1);
-	return (0);
+	if (stack->n == STACK)
+		return (STACK);
+	else if (stack->n == QUEUE)
+		return (QUEUE);
+	return (2);
 }

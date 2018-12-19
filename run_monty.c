@@ -10,7 +10,7 @@
 void free_tokens(void);
 void (*get_op_func(char *opcode))(stack_t**, unsigned int);
 int run_monty(FILE *script_fd);
-int token_arr_len(void);
+unsigned int token_arr_len(void);
 void set_op_tok_error(int error_code);
 
 /**
@@ -75,8 +75,8 @@ int run_monty(FILE *script_fd)
 	stack_t *stack = NULL;
 	char *line = NULL;
 	size_t len = 0, exit_status = EXIT_SUCCESS;
-	unsigned int line_number = 1;
-	void (*op_func)(stack_t**, unsigned int);
+	unsigned int line_number = 1, prev_tok_len = 0;
+	void (*op_func)(stack_t**, unsigned int); 
 
 	if (init_stack(&stack) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
@@ -129,12 +129,13 @@ int run_monty(FILE *script_fd)
  *
  * Return: length of current op toks as int.
  */
-int token_arr_len(void)
+unsigned int token_arr_len(void)
 {
-	int toks_len = 0;
+	unsigned int toks_len = 0;
 
 	while (op_toks[toks_len])
 		toks_len++;
+	return (toks_len);
 }
 
 /**

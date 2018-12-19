@@ -44,7 +44,8 @@ typedef struct instruction_s
 /* PRIMARY INTERPRETER FUNCTIONS */
 void free_tokens(void);
 void free_stack(stack_t **stack);
-int is_stack(stack_t **stack);
+int check_mode(stack_t *stack);
+int init_stack(stack_t **stack);
 int run_monty(FILE *script_fd);
 void set_op_tok_error(int error_code);
 

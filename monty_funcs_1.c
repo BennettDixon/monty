@@ -20,16 +20,7 @@ void monty_pop(stack_t **stack, unsigned int line_number);
  */
 void monty_stack(stack_t **stack, unsigned int line_number)
 {
-	stack_t *tmp;
-
-	if (stack == NULL || *stack == NULL)
-		return;
-
-	tmp = *stack;
-	while (tmp->prev != NULL)
-		tmp = tmp->prev;
-	*stack = tmp;
-
+	(*stack)->n = STACK;
 	(void)line_number;
 }
 
@@ -40,15 +31,7 @@ void monty_stack(stack_t **stack, unsigned int line_number)
  */
 void monty_queue(stack_t **stack, unsigned int line_number)
 {
-	stack_t *tmp;
-
-	if (stack == NULL || *stack == NULL)
-		return;
-
-	tmp = *stack;
-	while (tmp->next != NULL)
-		tmp = tmp->next;
-	*stack = tmp;
+	(*stack)->n = QUEUE;
 	(void)line_number;
 }
 
@@ -60,30 +43,13 @@ void monty_queue(stack_t **stack, unsigned int line_number)
  */
 void monty_pall(stack_t **stack, unsigned int line_number)
 {
-	stack_t *tmp;
+	stack_t *tmp = (*stack)->next;
 
-	if (stack == NULL || *stack == NULL)
-		return;
-	tmp = *stack;
-
-	if (tmp->prev == NULL)
+	while (tmp)
 	{
-		while (tmp)
-		{
-			printf("%d\n", tmp->n);
-			tmp = tmp->next;
-		}
+		printf("%d\n", tmp->n);
+		tmp = tmp->next;
 	}
-
-	else
-	{
-		while (tmp)
-		{
-			printf("%d\n", tmp->n);
-			tmp = tmp->prev;
-		}
-	}
-
 	(void)line_number;
 }
 
@@ -119,27 +85,23 @@ void monty_push(stack_t **stack, unsigned int line_number)
 	}
 	new->n = value;
 
-	if (!stack || !(*stack) || (*stack)->prev == NULL) /* STACK mode */
+	if (check_mode(*stack) == STACK) /* STACK mode insert at front */
 	{
-		if (!stack || !(*stack))
-			tmp = NULL;
-		else
-			tmp = *stack;
-		new->prev = NULL;
+		tmp = (*stack)->next;
+		new->prev = *stack;
 		new->next = tmp;
-		if (tmp != NULL)
+		if (tmp)
 			tmp->prev = new;
-		*stack = new;
+		(*stack)->next = new;
 	}
-	else /* QUEUE mode */
+	else /* QUEUE mode insert at end */
 	{
 		tmp = *stack;
-		while (tmp->prev)
-			tmp = tmp->prev;
-		new->prev = NULL;
-		new->next = tmp;
-		if (tmp != NULL)
-			tmp->prev = new;
+		while (tmp->next)
+			tmp = tmp->next;
+		new->prev = tmp;
+		new->next = NULL;
+		tmp->next = new;
 	}
 }
 
@@ -154,27 +116,17 @@ void monty_push(stack_t **stack, unsigned int line_number)
  */
 void monty_pop(stack_t **stack, unsigned int line_number)
 {
-	stack_t *next = NULL, *prev = NULL;
+	stack_t *next = NULL;
 
-	if (!stack || !(*stack))
+	if ((*stack)->next == NULL)
 	{
 		pop_error(line_number);
 		return;
 	}
-	else if ((*stack)->prev == NULL) /* STACK MODE */
-	{
-		next = (*stack)->next;
-		free(*stack);
-		if (next)
-			next->prev = NULL;
-		*stack = next;
-	}
-	else /* QUEUE MODE */
-	{
-		prev = (*stack)->prev;
-		free(*stack);
-		if (prev)
-			prev->next = NULL;
-		*stack = prev;
-	}
+
+	next = (*stack)->next->next;
+	free((*stack)->next);
+	if (next)
+		next->prev = *stack;
+	(*stack)->next = next;
 }
