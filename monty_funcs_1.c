@@ -12,9 +12,8 @@ void monty_pall(stack_t **stack, unsigned int line_number);
 void monty_push(stack_t **stack, unsigned int line_number);
 
 /**
- * monty_stack - Converts a stack to a queue.
- * @stack: A pointer to the top (stack) or bottom (queue)
- *         of a stack_t linked list.
+ * monty_stack - Converts a queue to a stack.
+ * @stack: A pointer to the bottom (queue) of a stack_t linked list.
  * @line_number: The current working line number of a monty opcodes file.
  */
 void monty_stack(stack_t **stack, unsigned int line_number)
@@ -27,15 +26,14 @@ void monty_stack(stack_t **stack, unsigned int line_number)
 	tmp = *stack;
 	while (tmp->prev != NULL)
 		tmp = tmp->prev;
-	stack = &tmp;
+	*stack = tmp;
 
 	(void)line_number;
 }
 
 /**
- * monty_queue - Converts a queue to a stack.
- * @stack: A pointer to the top (stack) or bottom (queue)
- *         of a stack_t linked list.
+ * monty_queue - Converts a stack to a queue.
+ * @stack: A pointer to the top (stack) of a stack_t linked list.
  * @line_number: The current working line number of a monty opcodes file.
  */
 void monty_queue(stack_t **stack, unsigned int line_number)
@@ -48,7 +46,7 @@ void monty_queue(stack_t **stack, unsigned int line_number)
 	tmp = *stack;
 	while (tmp->next != NULL)
 		tmp = tmp->next;
-	stack = &tmp;
+	*stack = tmp;
 
 	(void)line_number;
 }
@@ -101,7 +99,10 @@ void monty_push(stack_t **stack, unsigned int line_number)
 
 	new = malloc(sizeof(stack_t));
 	if (new == NULL)
+	{
 		malloc_error();
+		return;
+	}
 
 	if (stack && *stack)
 	{
@@ -116,17 +117,23 @@ void monty_push(stack_t **stack, unsigned int line_number)
 		tmp = NULL;
 
 	if (op_toks[1] == NULL)
+	{
 		no_int_error(line_number);
+		return;
+	}
 
 	value = atoi(op_toks[1]);
 	if (value == 0 && *op_toks[1] != '0')
+	{
 		no_int_error(line_number);
+		return;
+	}
 
 	new->n = value;
 	new->prev = NULL;
 	new->next = tmp;
 	if (tmp != NULL)
 		tmp->prev = new;
-	if (!stack || !(*stack) || (*stack)->next)
+	if (*stack == tmp)
 		*stack = new;
 }
