@@ -47,3 +47,9 @@ int pop_error(unsigned int line_number)
 	fprintf(stderr, "L<%u>: can't pop an empty stack\n", line_number);
 	return (EXIT_FAILURE);
 }
+
+int pint_error(unsigned int line_number)
+{
+	fprintf(stderr, "L<%d>: can't pint, stack empty\n", line_number);
+	return (EXIT_FAILURE);
+}

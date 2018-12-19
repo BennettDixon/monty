@@ -12,3 +12,19 @@ void monty_nop(stack_t **stack, unsigned int line_number)
 	(void)line_number;
 	return;
 }
+
+
+void monty_pint(stack_t **stack, unsigned int line_number)
+{
+	stack_t *tmp = NULL;
+
+	if (!stack || !(*stack))
+	{
+		pint_error(line_number);
+		return;
+	}
+	tmp = *stack;
+	while (tmp->prev != NULL)
+		tmp = tmp->prev;
+	printf("%d\n", tmp->n);
+}
