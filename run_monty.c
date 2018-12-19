@@ -1,8 +1,68 @@
+/*
+ * File: run_monty.c
+ * Auth: Bennett Dixon
+ *       Brennan D Baraban
+ */
+
 #include "monty.h"
 #include <string.h>
 
 void free_tokens(void);
 void free_stack(stack_t **stack);
+void (*get_op_func(char *opcode))(stack_t**, unsigned int);
+int run_monty(FILE *script_fd);
+
+/**
+ * free_tokens - Frees the global op_toks array of strings.
+ */
+void free_tokens(void)
+{
+	size_t i = 0;
+
+	if (op_toks == NULL)
+		return;
+
+	while (op_toks[i])
+	{
+		if (op_toks[i])
+			free(op_toks[i]);
+		i++;
+	}
+	free(op_toks);
+}
+
+/**
+ * free_stack - Frees a stack_t stack.
+ * @stack: A pointer to the top (stack) or
+ *         bottom (queue) of a stack_t.
+ */
+void free_stack(stack_t **stack)
+{
+	stack_t *tmp = NULL, *iter = NULL;
+
+	if (stack && *stack)
+	{
+		tmp = *stack;
+		if ((*stack)->next == NULL) /* queue */
+		{
+			while (tmp)
+			{
+				iter = tmp->prev;
+				free(tmp);
+				tmp = iter;
+			}
+		}
+		else /* normal stack */
+		{
+			while (tmp)
+			{
+				iter = tmp->next;
+				free(tmp);
+				tmp = iter;
+			}
+		}
+	}
+}
 
 /**
  * get_op_func - Matches an opcode with its corresponding function.
@@ -32,8 +92,8 @@ void (*get_op_func(char *opcode))(stack_t**, unsigned int)
 
 /**
  * run_monty - primary function to execute a monty script currently open
- * @script_fd: file descriptor for script that is open, to be read
- * and processed
+ * @script_fd: file descriptor for script that is open,
+ *             to be read and processed
  *
  * Return: (EXIT_SUCCESS) on success, respective error code on failure
  */
@@ -44,74 +104,38 @@ int run_monty(FILE *script_fd)
 	size_t len = 0;
 	unsigned int line_number = 1;
 	void (*op_func)(stack_t**, unsigned int);
-	int read = -1;
 
-	while ("C is awesome")
+	while (getline(&line, &len, script_fd) != -1)
 	{
-		line = NULL;
-		read = getline(&line, &len, script_fd);
-		if (read == -1)
+		op_toks = strtow(line, " \n\t\a\b");
+		if (op_toks == NULL)
 		{
 			free(line);
-			if (line && line[0] == 0) /* EOF */
-				break;
+			free_stack(&stack);
 			return (malloc_error());
 		}
-		op_toks = strtow(line, " \n\t\a\b");
-		free(line);
-		if (op_toks == NULL)
-			return (malloc_error());
+
 		op_func = get_op_func(op_toks[0]);
 		if (op_func == NULL)
 		{
+			free(line);
 			free_tokens();
+			free_stack(&stack);
 			return (unknown_op_error(op_toks[0], line_number));
 		}
+
 		op_func(&stack, line_number);
 		line_number++;
 		free_tokens();
 	}
 	free_stack(&stack);
+
+	if (line && *line == 0)
+	{
+		free(line);
+		return (malloc_error());
+	}
+
+	free(line);
 	return (EXIT_SUCCESS);
-}
-
-void free_tokens(void)
-{
-	size_t i = 0;
-
-	while(op_toks[i])
-	{
-		if (op_toks[i])
-			free(op_toks[i]);
-		i++;
-	}
-	free(op_toks);
-}
-
-void free_stack(stack_t **stack)
-{
-	stack_t *tmp = NULL, *iter = NULL;
-
-	if (stack && *stack)
-	{
-		tmp = *stack;
-		if ((*stack)->next == NULL) /* queue */
-		{
-			while (tmp)
-			{
-				iter = tmp->prev;
-				free(tmp);
-				tmp = iter;
-			}
-		}
-		else /* normal stack */
-		{
-			while (tmp)
-			{
-				iter = tmp->next;
-				free(tmp);
-				tmp = iter;
-			}
-		}
-	}
 }
