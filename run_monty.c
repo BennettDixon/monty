@@ -8,7 +8,6 @@
 #include <string.h>
 
 void free_tokens(void);
-void free_stack(stack_t **stack);
 void (*get_op_func(char *opcode))(stack_t**, unsigned int);
 int run_monty(FILE *script_fd);
 
@@ -26,39 +25,6 @@ void free_tokens(void)
 		free(op_toks[i]);
 
 	free(op_toks);
-}
-
-/**
- * free_stack - Frees a stack_t stack.
- * @stack: A pointer to the top (stack) or
- *         bottom (queue) of a stack_t.
- */
-void free_stack(stack_t **stack)
-{
-	stack_t *tmp = NULL, *iter = NULL;
-
-	if (stack && *stack)
-	{
-		tmp = *stack;
-		if ((*stack)->next == NULL) /* queue */
-		{
-			while (tmp)
-			{
-				iter = tmp->prev;
-				free(tmp);
-				tmp = iter;
-			}
-		}
-		else /* normal stack */
-		{
-			while (tmp)
-			{
-				iter = tmp->next;
-				free(tmp);
-				tmp = iter;
-			}
-		}
-	}
 }
 
 /**
@@ -109,6 +75,9 @@ int run_monty(FILE *script_fd)
 	size_t len = 0;
 	unsigned int line_number = 1;
 	void (*op_func)(stack_t**, unsigned int);
+
+	if (init_stack(&stack) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
 
 	while (getline(&line, &len, script_fd) != -1)
 	{

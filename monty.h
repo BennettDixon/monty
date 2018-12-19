@@ -5,6 +5,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#define STACK 0
+#define QUEUE 1
+
 /* GLOBAL OPCODE TOKENS */
 extern char **op_toks;
 
@@ -41,6 +44,7 @@ typedef struct instruction_s
 /* PRIMARY INTERPRETER FUNCTIONS */
 void free_tokens(void);
 void free_stack(stack_t **stack);
+int is_stack(stack_t **stack);
 int run_monty(FILE *script_fd);
 
 /* OPCODE FUNCTIONS */
