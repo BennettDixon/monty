@@ -46,6 +46,7 @@ void free_tokens(void);
 void free_stack(stack_t **stack);
 int is_stack(stack_t **stack);
 int run_monty(FILE *script_fd);
+void set_op_tok_error(int error_code);
 
 /* OPCODE FUNCTIONS */
 void monty_stack(stack_t **stack, unsigned int line_number);
@@ -63,6 +64,7 @@ void monty_nop(stack_t **stack, unsigned int line_number);
 
 /* CUSTOM STANDARD LIBRARY FUNCTIONS */
 char **strtow(char *str, char *delims);
+char *get_int(int n);
 
 /* ERROR MESSAGES & ERROR CODES */
 int usage_error(void);
