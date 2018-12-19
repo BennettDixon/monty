@@ -5,11 +5,13 @@
  */
 
 #include "monty.h"
+#include <stdio.h>
 
 void monty_stack(stack_t **stack, unsigned int line_number);
 void monty_queue(stack_t **stack, unsigned int line_number);
 void monty_pall(stack_t **stack, unsigned int line_number);
 void monty_push(stack_t **stack, unsigned int line_number);
+void monty_pop(stack_t **stack, unsigned int line_number);
 
 /**
  * monty_stack - Converts a queue to a stack.
@@ -136,4 +138,44 @@ void monty_push(stack_t **stack, unsigned int line_number)
 		tmp->prev = new;
 	if (*stack == tmp)
 		*stack = new;
+}
+
+/**
+ * monty_pop - removes the top element of the stack or the queue
+ *
+ * @stack: stack to remove value from, can be stack or queue
+ * @line_number: line number opcode was present in script.
+ * Used for debugging.
+ *
+ * Return: always void
+ */
+void monty_pop(stack_t **stack, unsigned int line_number)
+{
+	stack_t *next = NULL, *tmp = NULL;
+
+	if (!stack || !(*stack))
+	{
+		pop_error(line_number);
+		return;
+	}
+	else if ((*stack)->next == NULL && (*stack)->prev != NULL)
+	{
+		printf("in queue mode for PUSH\n");
+		tmp = *stack;
+		/* ADVANCE POINTER TO HEAD INSTEAD OF TAIL */
+		while (tmp)
+			tmp = tmp->prev;
+		next = tmp->next;
+		free(tmp);
+		if (next)
+			next->prev = NULL;
+	}
+	else /* STACK MODE */
+	{
+		next = (*stack)->next;
+		free(*stack);
+		if (next)
+			next->prev = NULL;
+		*stack = next;
+	}
 }

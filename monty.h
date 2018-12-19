@@ -47,6 +47,7 @@ int run_monty(FILE *script_fd);
 void monty_stack(stack_t **stack, unsigned int line_number);
 void monty_queue(stack_t **stack, unsigned int line_number);
 void monty_push(stack_t **stack, unsigned int line_number);
+void monty_pop(stack_t **stack, unsigned int line_number);
 void monty_pall(stack_t **stack, unsigned int line_number);
 void monty_add(stack_t **stack, unsigned int line_number);
 void monty_sub(stack_t **stack, unsigned int line_number);
@@ -65,5 +66,6 @@ int unknown_op_error(char *opcode, unsigned int line_number);
 int no_int_error(unsigned int line_number);
 int short_stack_error(unsigned int line_number, char *op);
 int div_error(unsigned int line_number);
+int pop_error(unsigned int line_number);
 
 #endif /* __MONTY_H__ */
