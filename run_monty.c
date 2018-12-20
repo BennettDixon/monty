@@ -5,10 +5,9 @@
  */
 
 #include "monty.h"
-#include <string.h>
 
 void free_tokens(void);
-unsigned int token_arr_len(void);
+void set_op_tok_error(void);
 int is_empty_line(char *line, char *delims);
 void (*get_op_func(char *opcode))(stack_t**, unsigned int);
 int run_monty(FILE *script_fd);
@@ -22,25 +21,22 @@ void free_tokens(void)
 
 	if (op_toks == NULL)
 		return;
+	if (op_toks[0] == NULL)
+		i = 1;
 
-	for (i = 0; op_toks[i]; i++)
+	for (; op_toks[i]; i++)
 		free(op_toks[i]);
 
 	free(op_toks);
 }
 
 /**
- * token_arr_len - Gets the length of current op_toks.
- *
- * Return: Length of current op_toks (as int).
+ * set_op_tok_error - Nullifies the first element of op_toks upon errors.
  */
-unsigned int token_arr_len(void)
+void set_op_tok_error(void)
 {
-	unsigned int toks_len = 0;
-
-	while (op_toks[toks_len])
-		toks_len++;
-	return (toks_len);
+	free(op_toks[0]);
+	op_toks[0] = NULL;
 }
 
 /**
@@ -119,7 +115,7 @@ int run_monty(FILE *script_fd)
 	stack_t *stack = NULL;
 	char *line = NULL;
 	size_t len = 0, exit_status = EXIT_SUCCESS;
-	unsigned int line_number = 0, prev_tok_len = 0;
+	unsigned int line_number = 0;
 	void (*op_func)(stack_t**, unsigned int);
 
 	if (init_stack(&stack) == EXIT_FAILURE)
@@ -129,12 +125,14 @@ int run_monty(FILE *script_fd)
 	{
 		line_number++;
 		op_toks = strtow(line, DELIMS);
-		if (op_toks == NULL)
+		if (op_toks == NULL) /* failed to tokenize */
 		{
 			if (is_empty_line(line, DELIMS))
 				continue;
+			free(line);
 			free_stack(&stack);
-			return (malloc_error());
+			malloc_error();
+			return (EXIT_FAILURE);
 		}
 		else if (op_toks[0][0] == '#') /* comment line */
 		{
@@ -142,22 +140,18 @@ int run_monty(FILE *script_fd)
 			continue;
 		}
 		op_func = get_op_func(op_toks[0]);
-		if (op_func == NULL)
+		if (op_func == NULL) /* unknown instruction */
 		{
-			free_stack(&stack);
-			exit_status = unknown_op_error(op_toks[0], line_number);
+			unknown_op_error(op_toks[0], line_number);
 			free_tokens();
+			exit_status = EXIT_FAILURE;
 			break;
 		}
-		prev_tok_len = token_arr_len();
 		op_func(&stack, line_number);
-		if (token_arr_len() != prev_tok_len)
+		if (op_toks[0] == NULL) /* error occurred in Monty func */
 		{
-			if (op_toks && op_toks[prev_tok_len])
-				exit_status = atoi(op_toks[prev_tok_len]);
-			else
-				exit_status = EXIT_FAILURE;
 			free_tokens();
+			exit_status = EXIT_FAILURE;
 			break;
 		}
 		free_tokens();
@@ -167,7 +161,8 @@ int run_monty(FILE *script_fd)
 	if (line && *line == 0)
 	{
 		free(line);
-		return (malloc_error());
+		malloc_error();
+		return (EXIT_FAILURE);
 	}
 
 	free(line);

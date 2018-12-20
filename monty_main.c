@@ -25,10 +25,18 @@ int main(int argc, char **argv)
 	int exit_code = EXIT_SUCCESS;
 
 	if (argc != 2)
-		return (usage_error());
+	{
+		usage_error();
+		return (EXIT_FAILURE);
+	}
+
 	script_fd = fopen(argv[1], "r");
 	if (script_fd == NULL)
-		return (f_open_error(argv[1]));
+	{
+		f_open_error(argv[1]);
+		return (EXIT_FAILURE);
+	}
+
 	exit_code = run_monty(script_fd);
 	fclose(script_fd);
 	return (exit_code);
