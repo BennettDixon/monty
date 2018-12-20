@@ -103,7 +103,7 @@ int run_monty(FILE *script_fd)
 			free_stack(&stack);
 			exit_status = unknown_op_error(op_toks[0], line_number);
 			free_tokens();
-			return (exit_status);
+			break;
 		}
 		prev_tok_len = token_arr_len();
 		op_func(&stack, line_number);
