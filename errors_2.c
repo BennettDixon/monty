@@ -48,6 +48,13 @@ int pop_error(unsigned int line_number)
 	return (EXIT_FAILURE);
 }
 
+/**
+ * pint_error - Prints the error message for monty_pint
+ * @line_number: The line number in a Monty bytecodes
+ *               where the error occured.
+ *
+ * Return: (EXIT_FAILURE) always
+ */
 int pint_error(unsigned int line_number)
 {
 	fprintf(stderr, "L<%d>: can't pint, stack empty\n", line_number);
@@ -88,6 +95,6 @@ void set_op_tok_error(int error_code)
 	}
 	new_toks[i++] = exit_str;
 	new_toks[i] = NULL;
-	free_tokens();
+	free(op_toks);
 	op_toks = new_toks;
 }
