@@ -67,20 +67,20 @@ void monty_push(stack_t **stack, unsigned int line_number)
 	new = malloc(sizeof(stack_t));
 	if (new == NULL)
 	{
-		malloc_error();
+		set_op_tok_error(malloc_error());
 		return;
 	}
 
 	if (op_toks[1] == NULL)
 	{
-		no_int_error(line_number);
+		set_op_tok_error(no_int_error(line_number));
 		return;
 	}
 
 	value = atoi(op_toks[1]);
 	if (value == 0 && *op_toks[1] != '0')
 	{
-		no_int_error(line_number);
+		set_op_tok_error(no_int_error(line_number));
 		return;
 	}
 	new->n = value;
@@ -120,7 +120,7 @@ void monty_pop(stack_t **stack, unsigned int line_number)
 
 	if ((*stack)->next == NULL)
 	{
-		pop_error(line_number);
+		set_op_tok_error(pop_error(line_number));
 		return;
 	}
 

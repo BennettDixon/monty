@@ -18,7 +18,7 @@ void monty_pint(stack_t **stack, unsigned int line_number)
 {
 	if ((*stack)->next == NULL)
 	{
-		pint_error(line_number);
+		set_op_tok_error(pint_error(line_number));
 		return;
 	}
 
