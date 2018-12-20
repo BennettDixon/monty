@@ -25,25 +25,16 @@ void monty_add(stack_t **stack, unsigned int line_number)
 {
 	stack_t *tmp;
 
-	if (!stack || !(*stack) ||
-	    (!((*stack)->prev) && !((*stack)->next)) || /* stack */
-	    (!((*stack)->next) && !((*stack)->prev))) /* queue */
+	if ((*stack)->next == NULL || (*stack)->next->next == NULL)
 	{
-		short_stack_error(line_number, "add");
+		set_op_tok_error(short_stack_error(line_number, "add"));
 		return;
 	}
 
-	tmp = *stack;
-	if ((*stack)->next == NULL)
-	{
-		while (tmp->prev != NULL)
-			tmp = tmp->prev;
-	}
-
+	tmp = (*stack)->next;
 	tmp->next->n += tmp->n;
-	tmp->next->prev = NULL;
-	if (*stack == tmp)
-		*stack = tmp->next;
+	tmp->next->prev = *stack;
+	(*stack)->next = tmp->next;
 	free(tmp);
 }
 
@@ -61,25 +52,16 @@ void monty_sub(stack_t **stack, unsigned int line_number)
 {
 	stack_t *tmp;
 
-	if (!stack || !(*stack) ||
-	    (!((*stack)->prev) && !((*stack)->next)) || /* stack */
-	    (!((*stack)->next) && !((*stack)->prev))) /* queue */
+	if ((*stack)->next == NULL || (*stack)->next->next == NULL)
 	{
-		short_stack_error(line_number, "sub");
+		set_op_tok_error(short_stack_error(line_number, "sub"));
 		return;
 	}
 
-	tmp = *stack;
-	if ((*stack)->next == NULL)
-	{
-		while (tmp->prev != NULL)
-			tmp = tmp->prev;
-	}
-
+	tmp = (*stack)->next;
 	tmp->next->n -= tmp->n;
-	tmp->next->prev = NULL;
-	if (*stack == tmp)
-		*stack = tmp->next;
+	tmp->next->prev = *stack;
+	(*stack)->next = tmp->next;
 	free(tmp);
 }
 
@@ -97,31 +79,22 @@ void monty_div(stack_t **stack, unsigned int line_number)
 {
 	stack_t *tmp;
 
-	if (!stack || !(*stack) ||
-	    (!((*stack)->prev) && !((*stack)->next)) || /* stack */
-	    (!((*stack)->next) && !((*stack)->prev))) /* queue */
+	if ((*stack)->next == NULL || (*stack)->next->next == NULL)
 	{
-		short_stack_error(line_number, "div");
+		set_op_tok_error(short_stack_error(line_number, "div"));
 		return;
 	}
 
-	tmp = *stack;
-	if ((*stack)->next == NULL)
-	{
-		while (tmp->prev != NULL)
-			tmp = tmp->prev;
-	}
-
+	tmp = (*stack)->next;
 	if (tmp->n == 0)
 	{
-		div_error(line_number);
+		set_op_tok_error(div_error(line_number));
 		return;
 	}
 
 	tmp->next->n /= tmp->n;
-	tmp->next->prev = NULL;
-	if (*stack == tmp)
-		*stack = tmp->next;
+	tmp->next->prev = *stack;
+	(*stack)->next = tmp->next;
 	free(tmp);
 }
 
@@ -139,25 +112,16 @@ void monty_mul(stack_t **stack, unsigned int line_number)
 {
 	stack_t *tmp;
 
-	if (!stack || !(*stack) ||
-	    (!((*stack)->prev) && !((*stack)->next)) || /* stack */
-	    (!((*stack)->next) && !((*stack)->prev))) /* queue */
+	if ((*stack)->next == NULL || (*stack)->next->next == NULL)
 	{
-		short_stack_error(line_number, "mul");
+		set_op_tok_error(short_stack_error(line_number, "mul"));
 		return;
 	}
 
-	tmp = *stack;
-	if ((*stack)->next == NULL)
-	{
-		while (tmp->prev != NULL)
-			tmp = tmp->prev;
-	}
-
+	tmp = (*stack)->next;
 	tmp->next->n *= tmp->n;
-	tmp->next->prev = NULL;
-	if (*stack == tmp)
-		*stack = tmp->next;
+	tmp->next->prev = *stack;
+	(*stack)->next = tmp->next;
 	free(tmp);
 }
 
@@ -175,30 +139,21 @@ void monty_mod(stack_t **stack, unsigned int line_number)
 {
 	stack_t *tmp;
 
-	if (!stack || !(*stack) ||
-	    (!((*stack)->prev) && !((*stack)->next)) || /* stack */
-	    (!((*stack)->next) && !((*stack)->prev))) /* queue */
+	if ((*stack)->next == NULL || (*stack)->next->next == NULL)
 	{
-		short_stack_error(line_number, "mod");
+		set_op_tok_error(short_stack_error(line_number, "mod"));
 		return;
 	}
 
-	tmp = *stack;
-	if ((*stack)->next == NULL)
-	{
-		while (tmp->prev != NULL)
-			tmp = tmp->prev;
-	}
-
+	tmp = (*stack)->next;
 	if (tmp->n == 0)
 	{
-		div_error(line_number);
+		set_op_tok_error(div_error(line_number));
 		return;
 	}
 
 	tmp->next->n %= tmp->n;
-	tmp->next->prev = NULL;
-	if (*stack == tmp)
-		*stack = tmp->next;
+	tmp->next->prev = *stack;
+	(*stack)->next = tmp->next;
 	free(tmp);
 }
