@@ -1,8 +1,6 @@
 # :ocean: Monty Interpreter
 
-TODO: UPDATE THIS DESCRIPTION
-cshell is an implementation of the original UNIX shell in C. It uses the POSIX API to implement a lot of the same functionality of Ken Thompson's first shell. The API calls predominantly used are <code>read</code>, <code>write</code>, <code>fork</code>, <code>exec</code>, and <code>wait</code> to name a few.
-
+Welcome to the Monty Bytecode Interpreter. This interpreter was built in the C language and is compliant with `ISO90`, `ISO99`, & `ISO11`. It reads a file of any extension (preferably `.m` although it doesn't matter), and interprets the byte codes contained in the file. Our interpreter can either be run in stack or queue mode, and have its mode switched mid script. See Examples for more information regarding this functionality. You may build stacks or queues with this interpreter and perform operations on them such as mathematical and position related operations.
 
 ## :running: Getting Started
 
@@ -38,52 +36,68 @@ gcc -Wall -Werror -Wextra -pedantic *.c -o monty
 
 ## :clipboard: Examples
 
-Using `$PATH` to find custom commands (executables)
+Note, Monty Interpreter runs in the default mode of STACK mode. Meaning it uses a stack. To switch to queue mode, see examples below.
+
+Push values onto the stack and print them all, or the top of the stack/front of queue.
 
 ```
-> echo dog
-dog
-> /bin/echo dog
-dog
+$ cat push_pall_pint.m
+push 1
+push 2
+push 3
+pall
+pint
+$ ./monty push_pall_pint.m
+3
+2
+1
+3
 ```
 
-Using `&&` or `||` logic to run commands based on success
+Using mathmatical operations to add, multiply, divide, etc. Takes the second from the top and performs the operation on the top: `second_from_top / top`, `second_from_top - top`, `etc`. Then assigns that to the `second_from_top` and pops the top element off the stack.
 
 ```
-> ls -l /asdfasdf && echo this won't print!
-ls: cannot access /asdfasdf: No such file or directory 
-> ls -l /asdfasdf || echo this will  print!
-ls: cannot access /asdfasdf: No such file or directory
-this will print!
+$ cat math.m
+push 3
+push 2
+push 1
+pall
+mul
+pall
+$ ./monty math.m
+1
+2
+3
+1
+6
 ```
 
-Using `;` to seperate commands and run regardless of success
+Entering queue mode to perform all operations in FIFO (queue) mode instead of default LIFO (stack) mode. Note: does not change current stack, sets front of queue to top of stack.
 
 ```
-> ls -l /asdfasdf ; echo printme! ; wc -l main.c
-ls: cannot access /asdfasdf: No such file or directory
-printme!
- 21 316 main.c
+$ cat queue.m
+queue
+push 1
+push 2
+push 3
+pall
+stack
+push 4
+push 5
+push 6
+pall
+$ ./monty queue.m
+1
+2
+3
+6
+5
+4
+1
+2
+3
 ```
 
-Using `exit [status]` to exit the process with status number
-
-```
-> exit 102
-vagrant@vagrant-ubuntu-trusty-64:~/simple_shell$ echo $?
-102
-```
-
-Using `env` to print the environmental variables
-
-```
-> env
-XDG_SESSION_ID=30
-TERM=ansi
-SHELL=/home/vagrant/simple_shell/seashell
-...
-...
-```
 ## :books: Coding Style Tests
 
 Strictly followed `Betty` style guide. To install
@@ -117,6 +131,5 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## :mega: Acknowledgments
 
-* Bennett Dixon (for being a wizard)
 * Holberton School (providing guidance)
 * Stack Overflow (help on various memory errors (not leaks))
