@@ -1,10 +1,15 @@
+/*
+ * File: int_to_string.c
+ * Auth: Bennett Dixon
+ */
+
 #include <stdlib.h>
 
+char *get_int(int num);
 unsigned int _abs(int);
-void fill_numbase_buff(unsigned int num, unsigned int base,
-			char *buff, int buff_size);
 int get_numbase_len(unsigned int num, unsigned int base);
-
+void fill_numbase_buff(unsigned int num, unsigned int base,
+		       char *buff, int buff_size);
 
 /**
  * get_int - gets a character pointer to new string containing int
