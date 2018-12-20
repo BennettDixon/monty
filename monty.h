@@ -5,6 +5,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#define STACK 0
+#define QUEUE 1
+#define DELIMS " \n\t\a\b"
+
 /* GLOBAL OPCODE TOKENS */
 extern char **op_toks;
 
@@ -41,7 +45,11 @@ typedef struct instruction_s
 /* PRIMARY INTERPRETER FUNCTIONS */
 void free_tokens(void);
 void free_stack(stack_t **stack);
+int check_mode(stack_t *stack);
+int init_stack(stack_t **stack);
 int run_monty(FILE *script_fd);
+unsigned int token_arr_len(void);
+void set_op_tok_error(int error_code);
 
 /* OPCODE FUNCTIONS */
 void monty_stack(stack_t **stack, unsigned int line_number);
@@ -59,6 +67,7 @@ void monty_nop(stack_t **stack, unsigned int line_number);
 
 /* CUSTOM STANDARD LIBRARY FUNCTIONS */
 char **strtow(char *str, char *delims);
+char *get_int(int n);
 
 /* ERROR MESSAGES & ERROR CODES */
 int usage_error(void);
