@@ -79,6 +79,8 @@ void monty_push(stack_t **stack, unsigned int line_number)
 
 	for (i = 0; op_toks[1][i]; i++)
 	{
+		if (op_toks[1][i] == '-' && i == 0)
+			continue;
 		if (op_toks[1][i] < '0' || op_toks[1][i] > '9')
 		{
 			set_op_tok_error(no_int_error(line_number));
