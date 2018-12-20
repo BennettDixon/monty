@@ -75,7 +75,7 @@ int run_monty(FILE *script_fd)
 	stack_t *stack = NULL;
 	char *line = NULL;
 	size_t len = 0, exit_status = EXIT_SUCCESS;
-	unsigned int line_number = 1, prev_tok_len = 0;
+	unsigned int line_number = 0, prev_tok_len = 0;
 	void (*op_func)(stack_t**, unsigned int);
 
 	if (init_stack(&stack) == EXIT_FAILURE)
@@ -83,6 +83,7 @@ int run_monty(FILE *script_fd)
 
 	while (getline(&line, &len, script_fd) != -1)
 	{
+		line_number++;
 		op_toks = strtow(line, DELIMS);
 		if (op_toks == NULL)
 		{
@@ -99,9 +100,10 @@ int run_monty(FILE *script_fd)
 		op_func = get_op_func(op_toks[0]);
 		if (op_func == NULL)
 		{
-			free_tokens();
 			free_stack(&stack);
-			return (unknown_op_error(op_toks[0], line_number));
+			exit_status = unknown_op_error(op_toks[0], line_number);
+			free_tokens();
+			return (exit_status);
 		}
 		prev_tok_len = token_arr_len();
 		op_func(&stack, line_number);
@@ -114,7 +116,6 @@ int run_monty(FILE *script_fd)
 			free_tokens();
 			break;
 		}
-		line_number++;
 		free_tokens();
 	}
 	free_stack(&stack);
