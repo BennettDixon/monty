@@ -88,6 +88,6 @@ void set_op_tok_error(int error_code)
 	}
 	new_toks[i++] = exit_str;
 	new_toks[i] = NULL;
-	free_tokens();
+	free(op_toks);
 	op_toks = new_toks;
 }
