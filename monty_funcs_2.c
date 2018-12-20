@@ -23,19 +23,14 @@ void monty_mod(stack_t **stack, unsigned int line_number);
  */
 void monty_add(stack_t **stack, unsigned int line_number)
 {
-	stack_t *tmp;
-
 	if ((*stack)->next == NULL || (*stack)->next->next == NULL)
 	{
 		set_op_tok_error(short_stack_error(line_number, "add"));
 		return;
 	}
 
-	tmp = (*stack)->next;
-	tmp->next->n += tmp->n;
-	tmp->next->prev = *stack;
-	(*stack)->next = tmp->next;
-	free(tmp);
+	(*stack)->next->next->n += (*stack)->next->n;
+	monty_pop(stack, line_number);
 }
 
 /**
