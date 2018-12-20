@@ -62,7 +62,7 @@ void monty_pall(stack_t **stack, unsigned int line_number)
 void monty_push(stack_t **stack, unsigned int line_number)
 {
 	stack_t *tmp, *new;
-	int value;
+	int i;
 
 	new = malloc(sizeof(stack_t));
 	if (new == NULL)
@@ -77,13 +77,15 @@ void monty_push(stack_t **stack, unsigned int line_number)
 		return;
 	}
 
-	value = atoi(op_toks[1]);
-	if (value == 0 && *op_toks[1] != '0')
+	for (i = 0; op_toks[1][i]; i++)
 	{
-		set_op_tok_error(no_int_error(line_number));
-		return;
+		if (op_toks[1][i] < '0' || op_toks[1][i] > '9')
+		{
+			set_op_tok_error(no_int_error(line_number));
+			return;
+		}
 	}
-	new->n = value;
+	new->n = atoi(op_toks[1]);
 
 	if (check_mode(*stack) == STACK) /* STACK mode insert at front */
 	{
