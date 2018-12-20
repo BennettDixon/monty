@@ -84,10 +84,10 @@ int run_monty(FILE *script_fd)
 	while (getline(&line, &len, script_fd) != -1)
 	{
 		line_number++;
-		op_toks = strtow(line, DELIMS);
+		op_toks = strtow(line, " \n");
 		if (op_toks == NULL)
 		{
-			if (is_empty_line(line, DELIMS))
+			if (is_empty_line(line, " \n"))
 				continue;
 			free_stack(&stack);
 			return (malloc_error());
