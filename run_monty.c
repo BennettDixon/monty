@@ -11,7 +11,7 @@ void free_tokens(void);
 void (*get_op_func(char *opcode))(stack_t**, unsigned int);
 int run_monty(FILE *script_fd);
 unsigned int token_arr_len(void);
-void set_op_tok_error(int error_code);
+int is_empty_line(char *line, char *delims);
 
 /**
  * free_tokens - Frees the global op_toks array of strings.
@@ -76,16 +76,18 @@ int run_monty(FILE *script_fd)
 	char *line = NULL;
 	size_t len = 0, exit_status = EXIT_SUCCESS;
 	unsigned int line_number = 1, prev_tok_len = 0;
-	void (*op_func)(stack_t**, unsigned int); 
+	void (*op_func)(stack_t**, unsigned int);
 
 	if (init_stack(&stack) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 
 	while (getline(&line, &len, script_fd) != -1)
 	{
-		op_toks = strtow(line, " \n\t\a\b");
+		op_toks = strtow(line, DELIMS);
 		if (op_toks == NULL)
 		{
+			if (is_empty_line(line, DELIMS))
+				continue;
 			free_stack(&stack);
 			return (malloc_error());
 		}
@@ -141,39 +143,29 @@ unsigned int token_arr_len(void)
 	return (toks_len);
 }
 
-/**
- * set_op_tok_error - sets last element of op_toks to be an error code
- * @error_code: integer to store as a string in op_toks
- *
- * Return: always void
- */
-void set_op_tok_error(int error_code)
-{
-	int toks_len = 0, i = 0;
-	char *exit_str = NULL;
-	char **new_toks = NULL;
 
-	toks_len = token_arr_len();
-	new_toks = malloc(sizeof(char *) * (toks_len + 2));
-	if (!op_toks)
+/**
+ * is_empty_line - Checks if a line read from getline only contains delimiters.
+ * @line: A pointer to the line.
+ * @delims: A string of delimiter characters.
+ *
+ * Return: If the line only contains delimiters - 1.
+ *         Otherwise - 0.
+ */
+int is_empty_line(char *line, char *delims)
+{
+	int i, j;
+
+	for (i = 0; line[i]; i++)
 	{
-		malloc_error();
-		return;
+		for (j = 0; delims[j]; j++)
+		{
+			if (line[i] == delims[j])
+				break;
+		}
+		if (delims[j] == '\0')
+			return (0);
 	}
-	while (i < toks_len)
-	{
-		new_toks[i] = op_toks[i];
-		i++;
-	}
-	exit_str = get_int(error_code);
-	if (!exit_str)
-	{
-		free(new_toks);
-		malloc_error();
-		return;
-	}
-	new_toks[i++] = exit_str;
-	new_toks[i] = NULL;
-	free_tokens();
-	op_toks = new_toks;
+
+	return (1);
 }

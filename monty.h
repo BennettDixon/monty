@@ -7,6 +7,7 @@
 
 #define STACK 0
 #define QUEUE 1
+#define DELIMS " \n\t\a\b"
 
 /* GLOBAL OPCODE TOKENS */
 extern char **op_toks;
@@ -47,6 +48,7 @@ void free_stack(stack_t **stack);
 int check_mode(stack_t *stack);
 int init_stack(stack_t **stack);
 int run_monty(FILE *script_fd);
+unsigned int token_arr_len(void);
 void set_op_tok_error(int error_code);
 
 /* OPCODE FUNCTIONS */
