@@ -1,10 +1,19 @@
+/*
+ * File: monty_funcs_3.c
+ * Auth: Bennett Dixon
+ *       Brennan D Baraban
+ */
+
 #include "monty.h"
 
+void monty_nop(stack_t **stack, unsigned int line_number);
+void monty_pchar(stack_t **stack, unsigned int line_number);
+void monty_pstr(stack_t **stack, unsigned int line_number);
+
 /**
- * monty_nop - does absolutely nothing for the opcode 'nop'
- * @stack: stack, needed for get_op_func()
- * @line_number: line number nop located at in script,
- * needed for get_op_func()
+ * monty_nop - Does absolutely nothing for the Monty opcode 'nop'.
+ * @stack: A pointer to the top mode node of a stack_t linked list.
+ * @line_number: The current working line number of a Monty bytecodes file.
  */
 void monty_nop(stack_t **stack, unsigned int line_number)
 {
@@ -13,24 +22,9 @@ void monty_nop(stack_t **stack, unsigned int line_number)
 }
 
 /**
- * monty_pint - Prints the top value of a stack_t linked list.
- * @stack: A pointer to the top of a stack_t linked list.
- * @line_number: The current working line number of a Monty bytecodes file.
- */
-void monty_pint(stack_t **stack, unsigned int line_number)
-{
-	if ((*stack)->next == NULL)
-	{
-		set_op_tok_error(pint_error(line_number));
-		return;
-	}
-
-	printf("%d\n", (*stack)->next->n);
-}
-
-/**
- * monty_pchar - Prints the character at the top of a stack_t linked list.
- * @stack: A pointer to the top of a stack_t linked list.
+ * monty_pchar - Prints the character in the top value
+ *               node of a stack_t linked list.
+ * @stack: A pointer to the top mode node of a stack_t linked list.
  * @line_number: The current working line number of a Monty bytecodes file.
  */
 void monty_pchar(stack_t **stack, unsigned int line_number)
@@ -51,26 +45,21 @@ void monty_pchar(stack_t **stack, unsigned int line_number)
 }
 
 /**
- * monty_swap - Swaps the top two elements of the stack.
- * @stack: A pointer to the top of a stack_t linked list.
+ * monty_pstr - Prints the string contained in a stack_t linked list.
+ * @stack: A pointer to the top mode node of a stack_t linked list.
  * @line_number: The current working line number of a Monty bytecodes file.
  */
-void monty_swap(stack_t **stack, unsigned int line_number)
+void monty_pstr(stack_t **stack, unsigned int line_number)
 {
-	stack_t *tmp;
+	stack_t *tmp = (*stack)->next;
 
-	if ((*stack)->next == NULL || (*stack)->next->next == NULL)
+	while (tmp && tmp->n != 0 && (tmp->n > 0 && tmp->n <= 127))
 	{
-		set_op_tok_error(short_stack_error(line_number, "swap"));
-		return;
+		printf("%c", tmp->n);
+		tmp = tmp->next;
 	}
 
-	tmp = (*stack)->next->next;
-	(*stack)->next->next = tmp->next;
-	(*stack)->next->prev = tmp;
-	if (tmp->next)
-		tmp->next->prev = (*stack)->next;
-	tmp->next = (*stack)->next;
-	tmp->prev = *stack;
-	(*stack)->next = tmp;
+	printf("\n");
+
+	(void)line_number;
 }

@@ -9,7 +9,7 @@
 
 void free_stack(stack_t **stack);
 int init_stack(stack_t **stack);
-int is_stack(stack_t **stack);
+int check_mode(stack_t *stack);
 
 /**
  * free_stack - Frees a stack_t stack.
