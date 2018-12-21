@@ -5,8 +5,9 @@
 
 #include <stdlib.h>
 
-int get_word_length(char *str, char *delims);
+char **strtow(char *str, char *delims);
 int is_delim(char ch, char *delims);
+int get_word_length(char *str, char *delims);
 int get_word_count(char *str, char *delims);
 char *get_next_word(char *str, char *delims);
 
